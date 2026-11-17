@@ -22,6 +22,17 @@ if "pipeline_executed" not in st.session_state:
     )
 
 # ==========================================
+# MAIN DATA PREPARATION
+# ==========================================
+df = st.session_state.df.copy()
+
+if "Last_Price" in df.columns and "Prev_Close" in df.columns:
+    df["Previous Close"] = df["Prev_Close"]
+    df["Last Closing Price"] = df["Last_Price"]
+    df["Price Difference"] = (df["Last Closing Price"] - df["Previous Close"]).round(2)
+    df["% Difference"] = ((df["Price Difference"] / df["Previous Close"]) * 100).round(2)
+
+# ==========================================
 # SIDEBAR: PIPELINE & DOCUMENT CONTROLS
 # ==========================================
 with st.sidebar:
@@ -34,7 +45,7 @@ with st.sidebar:
             )
             generate_pdf_report(st.session_state.df)
             st.session_state.pipeline_executed = True
-        st.success("Live ingestion complete!")
+        st.rerun()
 
     st.divider()
     st.subheader("📅 Date Horizon Filters")
@@ -45,10 +56,23 @@ with st.sidebar:
 
     st.divider()
     st.subheader("📧 Document Delivery Terminal")
-    if st.button("📤 Dispatch PDF Report", use_container_width=True):
-        pdf_file = generate_pdf_report(st.session_state.df)
+
+    # Generate fresh PDF bytes for immediate manual download
+    pdf_path = generate_pdf_report(df)
+    with open(pdf_path, "rb") as f:
+        pdf_bytes = f.read()
+
+    st.download_button(
+        label="📥 Download PDF Report",
+        data=pdf_bytes,
+        file_name="Global_Exchanges_Master_Report.pdf",
+        mime="application/pdf",
+        use_container_width=True,
+    )
+
+    if st.button("📤 Dispatch PDF Report via Email", use_container_width=True):
         gmail_cfg = dict(st.secrets["gmail"]) if "gmail" in st.secrets else {}
-        ok, status_msg = send_report_email(pdf_file, gmail_cfg)
+        ok, status_msg = send_report_email(pdf_path, gmail_cfg)
         if ok:
             st.success(status_msg)
         else:
@@ -62,15 +86,6 @@ st.caption("Automated ingestion pipeline mapping tracking deltas across India (B
 
 if not st.session_state.pipeline_executed:
     st.warning("⚠️ **Hub Pipeline Standby:** Displaying structural index tracking registry. Live metrics will map below after running execution pipeline.")
-
-df = st.session_state.df.copy()
-
-# Explicitly compute Last Closing Price - Previous Close = Price Difference & % Difference
-if "Last_Price" in df.columns and "Prev_Close" in df.columns:
-    df["Previous Close"] = df["Prev_Close"]
-    df["Last Closing Price"] = df["Last_Price"]
-    df["Price Difference"] = (df["Last Closing Price"] - df["Previous Close"]).round(2)
-    df["% Difference"] = ((df["Price Difference"] / df["Previous Close"]) * 100).round(2)
 
 tab_ledger, tab_analytics = st.tabs(["📋 Master Ledger Workspace", "📈 Cross-Sectional Analytics"])
 
@@ -127,7 +142,6 @@ with tab_ledger:
         )
         k4.metric("Last Sync Timestamp", last_sync)
 
-    # Order columns cleanly: Registry columns + Previous Close -> Last Closing Price -> Price Difference -> % Difference
     base_cols = ["Country", "Exchange", "Index / Benchmark Name", "yfinance Ticker"]
     calc_cols = [
         c for c in ["Previous Close", "Last Closing Price", "Price Difference", "% Difference", "Day_High", "Day_Low", "Market_Date", "Updated_At"]
