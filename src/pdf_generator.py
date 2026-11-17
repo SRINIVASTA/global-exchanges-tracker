@@ -27,13 +27,7 @@ def generate_pdf_report(df: pd.DataFrame) -> Path:
     styles = getSampleStyleSheet()
     elements = []
 
-    updated_str = (
-        str(export_df["Updated_At"].dropna().iloc[0])
-        if "Updated_At" in export_df.columns and not export_df["Updated_At"].dropna().empty
-        else "Verification Standby"
-    )
     elements.append(Paragraph("Global Stock Exchanges & Indices Filtered Ledger", styles["Title"]))
-    elements.append(Paragraph(f"Exported Indices: {len(export_df)} | Last Sync: {updated_str}", styles["Normal"]))
     elements.append(Spacer(1, 14))
 
     # Strict 5-column PDF layout
