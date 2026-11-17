@@ -1,0 +1,32 @@
+name: Sync Global Exchanges Ledger
+
+on:
+  schedule:
+    - cron: "0 */2 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-exchanges:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install -r requirements.txt
+
+      - name: Generate and update master CSV
+        run: python -c "from src.data_engine import execute_live_ingestion; execute_live_ingestion()"
+
+      - name: Commit updated master CSV
+        run: |
+          git config --local user.email "github-actions[bot]@://github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/global_exchanges_master.csv
+          git diff --quiet && git diff --staged --quiet || git commit -m "chore: update global_exchanges_master.csv"
+          git push
