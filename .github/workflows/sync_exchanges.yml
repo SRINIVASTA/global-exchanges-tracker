@@ -23,14 +23,17 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Generate and update master CSV
+      - name: Run headless ingestion & email dispatch
         env:
           PYTHONPATH: .
-        run: python -c "from src.data_engine import execute_live_ingestion; df = execute_live_ingestion(); print(f'Updated {len(df)} rows successfully.')"
+          USERNAME: ${{ secrets.USERNAME }}
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+          TO_EMAIL: ${{ secrets.TO_EMAIL }}
+        run: python cron_job.py
 
       - name: Commit and push updated master CSV
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "github-actions[bot]@://github.com"
           git config --local user.name "github-actions[bot]"
           git add data/global_exchanges_master.csv
           git diff --quiet && git diff --staged --quiet || git commit -m "chore: update global_exchanges_master.csv"
