@@ -20,11 +20,16 @@ EXCHANGE_DATA = [
     ("India", "NSE", "NIFTY 50", "^NSEI"),
     ("India", "NSE", "NIFTY BANK", "^NSEBANK"),
     ("India", "NSE", "NIFTY 500", "^CRSLDX"),
+    ("India", "NSE", "NIFTY Midcap 100", "NIFTY_MIDCAP_100.NS"),
     ("India", "NSE", "NIFTY IT", "^CNXIT"),
     ("India", "NSE", "NIFTY Auto", "^CNXAUTO"),
     ("India", "NSE", "NIFTY Pharma", "^CNXPHARMA"),
     ("India", "NSE", "NIFTY FMCG", "^CNXFMCG"),
-    ("India", "NSE", "NIFTY Midcap 100", "^CNXMIDCAP"),
+    ("India", "NSE", "NIFTY Media", "^CNXMEDIA"),
+    ("India", "NSE", "NIFTY Metal", "^CNXMETAL"),
+    ("India", "NSE", "NIFTY Energy", "^CNXENERGY"),
+    ("India", "NSE", "NIFTY Realty", "^CNXREALTY"),
+    ("India", "NSE", "NIFTY PSU Bank", "^CNXPSUBANK"),
     # USA
     ("USA", "NYSE/S&P", "S&P 500", "^GSPC"),
     ("USA", "NYSE", "Dow Jones Industrial Average", "^DJI"),
@@ -51,7 +56,6 @@ def build_master_csv():
         columns=["Country", "Exchange", "Index / Benchmark Name", "yfinance Ticker"],
     )
     df.to_csv(MASTER_CSV, index=False)
-    print(f"Generated {MASTER_CSV} with {len(df)} indices.")
     return df
 
 if __name__ == "__main__":
