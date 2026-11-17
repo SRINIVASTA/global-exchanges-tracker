@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 from src.data_engine import fetch_master_list, execute_live_ingestion
 from src.pdf_generator import generate_pdf_report
-from src.email_service import send_report_email
+from src.email_service import EnterpriseEmailService
 
 st.set_page_config(
     page_title="Global Exchanges Market Performance Enterprise Workspace",
@@ -142,7 +142,7 @@ with tab_ledger:
     st.dataframe(styled_df, use_container_width=True, hide_index=True, height=560)
 
 # ==========================================
-# POPULATE SIDEBAR PDF DOWNLOAD & EMAIL FOR FILTERED DATA ONLY
+# POPULATE SIDEBAR PDF DOWNLOAD & EMAIL DISPATCH (FILTERED DATA ONLY)
 # ==========================================
 filtered_pdf_path = generate_pdf_report(filtered_df)
 with open(filtered_pdf_path, "rb") as f:
@@ -157,12 +157,31 @@ pdf_slot.download_button(
 )
 
 if email_slot.button("📤 Dispatch Filtered PDF via Email", use_container_width=True):
-    gmail_cfg = dict(st.secrets["gmail"]) if "gmail" in st.secrets else {}
-    ok, status_msg = send_report_email(filtered_pdf_path, gmail_cfg)
-    if ok:
-        st.sidebar.success(status_msg)
-    else:
-        st.sidebar.error(status_msg)
+    try:
+        gmail_cfg = dict(st.secrets["gmail"]) if "gmail" in st.secrets else dict(st.secrets)
+        sender_email = str(gmail_cfg.get("username", "")).strip()
+        app_password = str(gmail_cfg.get("app_password", "")).strip()
+        raw_to = gmail_cfg.get("to_email", "")
+
+        if isinstance(raw_to, list):
+            recipient_string = ", ".join(str(r).strip() for r in raw_to if str(r).strip())
+        else:
+            recipient_string = str(raw_to).strip()
+
+        if not sender_email or not app_password or not recipient_string:
+            st.sidebar.error("Missing SMTP credentials (username, app_password, or to_email) in secrets.")
+        else:
+            with st.spinner("Dispatching PDF report via secure SMTP relay..."):
+                sent_count = EnterpriseEmailService.send_report(
+                    recipient_string=recipient_string,
+                    attachment_path=str(filtered_pdf_path),
+                    sender_email=sender_email,
+                    app_password=app_password,
+                    subject="Automated Executive Briefing: Global Exchanges Market Matrix",
+                )
+            st.sidebar.success(f"Dispatched filtered PDF report to {sent_count} recipient(s).")
+    except Exception as e:
+        st.sidebar.error(f"SMTP Error: {e}")
 
 with tab_analytics:
     if "% Difference" not in filtered_df.columns or filtered_df["% Difference"].dropna().empty:
