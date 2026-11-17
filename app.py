@@ -16,7 +16,10 @@ if "df" not in st.session_state:
     st.session_state.df = fetch_master_list()
 
 if "pipeline_executed" not in st.session_state:
-    st.session_state.pipeline_executed = "Last_Price" in st.session_state.df.columns and not st.session_state.df["Last_Price"].dropna().empty
+    st.session_state.pipeline_executed = (
+        "Last_Price" in st.session_state.df.columns
+        and not st.session_state.df["Last_Price"].dropna().empty
+    )
 
 # ==========================================
 # SIDEBAR: PIPELINE & FILTER CONTROLS
@@ -104,7 +107,11 @@ with tab_ledger:
         k1.metric("Tracked Indices", len(filtered_df))
         k2.metric("Advancing (🟢)", int((filtered_df["Pct_Change"] > 0).sum()))
         k3.metric("Declining (🔴)", int((filtered_df["Pct_Change"] < 0).sum()))
-        last_sync = filtered_df["Updated_At"].dropna().iloc
+        last_sync = (
+            str(filtered_df["Updated_At"].dropna().iloc[0])
+            if "Updated_At" in filtered_df.columns and not filtered_df["Updated_At"].dropna().empty
+            else "N/A"
+        )
         k4.metric("Last Sync Timestamp", last_sync)
 
     def color_variance(val):
