@@ -116,6 +116,16 @@ Once executed, open your desktop browser and navigate to the live deployment lin
 🔗 **`http://localhost:8501`**
 
 ---
+## ⏱️ Automated Ingestion Schedule
+
+* **Execution Cadence:** Runs automatically **Monday through Friday at 5:00 PM IST** (`11:30 UTC`) via `.github/workflows/sync_exchanges.yml`.
+* **Headless Pipeline (`cron_job.py`):** Refreshes `data/global_exchanges_master.csv`, compiles PDF reports, commits updates, and triggers executive email briefings.
+
+## ⚡ Operational Workflow
+
+1. **Phase 1 (Verification Standby):** Review the loaded global exchange registry and apply cascading filters on the desktop table.
+2. **Phase 2 (Live Sync):** Select your date horizon and click **🚀 Execute Live Ingestion** to pull cross-timezone pricing via `yfinance` and calculate performance metrics.
+3. **Phase 3 (Export & Dispatch):** Download a clean 5-column landscape PDF report or dispatch it directly via the enterprise email service.
 
 ## ⚡ Operational Guidelines
 
