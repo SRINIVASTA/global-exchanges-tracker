@@ -56,7 +56,7 @@ def execute_live_ingestion(start_date: date | None = None, end_date: date | None
     for ticker in df["yfinance Ticker"]:
         hist = _extract_ticker_history(raw, str(ticker).strip(), len(tickers), start_date, end_date)
         if len(hist) >= 2:
-            prev_val = float(hist["Close"].iloc) if (start_date and end_date) else float(hist["Close"].iloc[-2])
+            prev_val = float(hist["Close"].iloc[0]) if (start_date and end_date) else float(hist["Close"].iloc[-2])
             last_val = float(hist["Close"].iloc[-1])
             delta = last_val - prev_val
             pct = (delta / prev_val) * 100
