@@ -14,8 +14,10 @@ EXCHANGE_DATA = [
     ("India", "BSE", "BSE Auto", "BSE-AUTO.BO"),
     ("India", "BSE", "BSE Healthcare", "BSE-HC.BO"),
     ("India", "BSE", "BSE FMCG", "BSE-FMCG.BO"),
-    ("India", "BSE", "BSE MidCap", "BSE-MIDCAP.BO"),
-    ("India", "BSE", "BSE SmallCap", "BSE-SMLCAP.BO"),
+    ("India", "BSE", "BSE 150 MidCap", "MID150.BO"),
+    ("India", "BSE", "BSE MidCap Select", "MIDSEL.BO"),
+    ("India", "BSE", "BSE 250 SmallCap", "SML250.BO"),
+    ("India", "BSE", "BSE SmallCap Select", "SMLSEL.BO"),
     # INDIA - NSE
     ("India", "NSE", "NIFTY 50", "^NSEI"),
     ("India", "NSE", "NIFTY BANK", "^NSEBANK"),
