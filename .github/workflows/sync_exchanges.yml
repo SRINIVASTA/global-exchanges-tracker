@@ -10,22 +10,27 @@ permissions:
 
 jobs:
   sync-exchanges:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
       - name: Generate and update master CSV
-        run: python -c "from src.data_engine import execute_live_ingestion; execute_live_ingestion()"
+        env:
+          PYTHONPATH: .
+        run: python -c "from src.data_engine import execute_live_ingestion; df = execute_live_ingestion(); print(f'Updated {len(df)} rows successfully.')"
 
-      - name: Commit updated master CSV
+      - name: Commit and push updated master CSV
         run: |
-          git config --local user.email "github-actions[bot]@://github.com"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add data/global_exchanges_master.csv
           git diff --quiet && git diff --staged --quiet || git commit -m "chore: update global_exchanges_master.csv"
