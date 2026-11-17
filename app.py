@@ -33,7 +33,7 @@ if "Last_Price" in df.columns and "Prev_Close" in df.columns:
     df["% Difference"] = ((df["Price Difference"] / df["Previous Close"]) * 100).round(2)
 
 # ==========================================
-# SIDEBAR: PIPELINE & DOCUMENT CONTROLS
+# SIDEBAR: PIPELINE & DATE CONTROLS
 # ==========================================
 with st.sidebar:
     st.header("⚙️ Pipeline Execution Control")
@@ -43,7 +43,6 @@ with st.sidebar:
                 start_date=st.session_state.get("start_date"),
                 end_date=st.session_state.get("end_date"),
             )
-            generate_pdf_report(st.session_state.df)
             st.session_state.pipeline_executed = True
         st.rerun()
 
@@ -56,27 +55,8 @@ with st.sidebar:
 
     st.divider()
     st.subheader("📧 Document Delivery Terminal")
-
-    # Generate fresh PDF bytes for immediate manual download
-    pdf_path = generate_pdf_report(df)
-    with open(pdf_path, "rb") as f:
-        pdf_bytes = f.read()
-
-    st.download_button(
-        label="📥 Download PDF Report",
-        data=pdf_bytes,
-        file_name="Global_Exchanges_Master_Report.pdf",
-        mime="application/pdf",
-        use_container_width=True,
-    )
-
-    if st.button("📤 Dispatch PDF Report via Email", use_container_width=True):
-        gmail_cfg = dict(st.secrets["gmail"]) if "gmail" in st.secrets else {}
-        ok, status_msg = send_report_email(pdf_path, gmail_cfg)
-        if ok:
-            st.success(status_msg)
-        else:
-            st.error(status_msg)
+    pdf_slot = st.empty()
+    email_slot = st.empty()
 
 # ==========================================
 # MAIN DESKTOP WORKSPACE
@@ -160,6 +140,29 @@ with tab_ledger:
         styled_df = styled_df.map(color_variance, subset=["Price Difference", "% Difference"])
 
     st.dataframe(styled_df, use_container_width=True, hide_index=True, height=560)
+
+# ==========================================
+# POPULATE SIDEBAR PDF DOWNLOAD & EMAIL FOR FILTERED DATA ONLY
+# ==========================================
+filtered_pdf_path = generate_pdf_report(filtered_df)
+with open(filtered_pdf_path, "rb") as f:
+    filtered_pdf_bytes = f.read()
+
+pdf_slot.download_button(
+    label=f"📥 Download Filtered PDF ({len(filtered_df)} rows)",
+    data=filtered_pdf_bytes,
+    file_name="Filtered_Exchanges_Report.pdf",
+    mime="application/pdf",
+    use_container_width=True,
+)
+
+if email_slot.button("📤 Dispatch Filtered PDF via Email", use_container_width=True):
+    gmail_cfg = dict(st.secrets["gmail"]) if "gmail" in st.secrets else {}
+    ok, status_msg = send_report_email(filtered_pdf_path, gmail_cfg)
+    if ok:
+        st.sidebar.success(status_msg)
+    else:
+        st.sidebar.error(status_msg)
 
 with tab_analytics:
     if "% Difference" not in filtered_df.columns or filtered_df["% Difference"].dropna().empty:
