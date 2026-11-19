@@ -47,6 +47,7 @@ graph TD
     linkStyle 2 stroke:#EF4444,stroke-width:4px,stroke-dasharray: 5,animation: actionFlow 0.4s linear infinite;
 
 {
+  "theme": "dark",
   "themeCSS": "@keyframes actionFlow { from { stroke-dashoffset: 20; } to { stroke-dashoffset: 0; } }"
 }
 ```
