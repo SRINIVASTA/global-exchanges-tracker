@@ -1,3 +1,4 @@
+```mermaid
 graph TD
     %% Global Slide Styles
     classDef default fill:#111827,stroke:#374151,stroke-width:2px,color:#F3F4F6;
@@ -46,3 +47,4 @@ graph TD
     style FEAT1 fill:#111827,stroke:#374151
     style FEAT2 fill:#111827,stroke:#374151
     style FEAT3 fill:#180808,stroke:#EF4444,stroke-width:2px
+```
