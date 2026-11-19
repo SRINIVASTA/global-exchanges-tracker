@@ -22,7 +22,7 @@ graph TD
         end
     end
 
-    %% Class Assigning (Moved away from titles to prevent parsing conflicts)
+    %% Class Assigning
     class F1_DESC,F2_DESC feature;
     class F3_DESC usp;
     class S1,S2,S3,S4,S5,S6 sketch;
@@ -40,4 +40,13 @@ graph TD
     style SKETCH1 fill:#030712,stroke:#6B7280,stroke-dasharray: 5 5
     style SKETCH2 fill:#030712,stroke:#6B7280,stroke-dasharray: 5 5
     style SKETCH3 fill:#030712,stroke:#EF4444,stroke-dasharray: 5 5
+
+    %% ⚡ Running Flow Animation Definitions
+    linkStyle 0 stroke:#3B82F6,stroke-width:3px,stroke-dasharray: 5,animation: actionFlow 2s linear infinite;
+    linkStyle 1 stroke:#10B981,stroke-width:3px,stroke-dasharray: 5,animation: actionFlow 2s linear infinite;
+    linkStyle 2 stroke:#EF4444,stroke-width:4px,stroke-dasharray: 5,animation: actionFlow 0.5s linear infinite;
+
+    %% Custom CSS Injection for live viewers (Not supported on native GitHub markdown)
+    %% Note: This block creates the moving marching-ants dash effect on the lines
+    %% @meta {"style": {"css": "@keyframes actionFlow { from { stroke-dashoffset: 20; } to { stroke-dashoffset: 0; } }"}}
 ```
