@@ -1,11 +1,17 @@
 import os
 import tomllib
+from datetime import datetime, timedelta, date
 from pathlib import Path
 from src.data_engine import execute_live_ingestion
 from src.pdf_generator import generate_pdf_report
 from src.email_service import EnterpriseEmailService
 
 SECRETS_PATH = Path(__file__).resolve().parent / ".streamlit" / "secrets.toml"
+
+def get_ist_date() -> date:
+    """Returns the current calendar date in Indian Standard Time (IST)."""
+    # Overcomes the runner's midnight system clock rollover by explicitly matching Indian timelines
+    return (datetime.utcnow() + timedelta(hours=5, minutes=30)).date()
 
 def _load_smtp_credentials() -> tuple[str, str, str]:
     """Load credentials from GitHub Actions env vars first, then fallback to local .streamlit/secrets.toml."""
@@ -29,7 +35,13 @@ def _load_smtp_credentials() -> tuple[str, str, str]:
 
 def run_headless_pipeline():
     print("Starting headless global exchanges ingestion...")
-    df = execute_live_ingestion()
+    
+    # Calculate the safe market target date using Indian Standard Time
+    target_date = get_ist_date()
+    print(f"Targeting evaluation ledger date window: {target_date.strftime('%d/%m/%Y')}")
+
+    # Pass the calculated date to guarantee data integrity despite GitHub runner queue delays
+    df = execute_live_ingestion(target_date=target_date)
     print(f"Updated master CSV with {len(df)} global indices.")
 
     pdf_path = generate_pdf_report(df)
@@ -42,7 +54,7 @@ def run_headless_pipeline():
             attachment_path=str(pdf_path),
             sender_email=sender,
             app_password=password,
-            subject="Automated Executive Briefing: Global Exchanges Market Matrix",
+            subject=f"Automated Executive Briefing: Global Exchanges Market Matrix [{target_date.strftime('%d/%m/%Y')}]",
         )
         print(f"Dispatched PDF briefing to {sent_count} recipient(s).")
     else:
