@@ -1,32 +1,30 @@
 ```mermaid
 graph LR
-    %% Widescreen Layout Initialization (Forces parallel landscape generation)
-    
-    %% Slide Left Boundary Anchor
-    SLIDE_START[📺 PRESENTATION SLIDE:<br>SYSTEM ARCHITECTURE]:::slideFrame
+    %% Widescreen Layout Initialization (Landscape Slide Ratio)
+    SLIDE_START[📺 PRESENTATION SLIDE:<br>SYSTEM ARCHITECTURE]
 
     %% ==================== TOP NAVIGATION ROW ====================
     subgraph NAV [🌐 CENTRAL ROUTER: MULTI-TAB PRESENTER INTERFACE]
-        T1[📊 Tab 1: Monitoring Terminal]:::widget
-        T2[🧠 Tab 2: Gemma Reason Desk]:::widget
-        T3[🔍 Tab 3: Customer 360 Lookup]:::widget
-        T4[⚡ Tab 4: Actions Remediation]:::widget
-        T5[🔐 Tab 5: IAM View Directory]:::widget
+        T1[📊 Tab 1: Monitoring Terminal]
+        T2[🧠 Tab 2: Gemma Reason Desk]
+        T3[🔍 Tab 3: Customer 360 Lookup]
+        T4[⚡ Tab 4: Actions Remediation]
+        T5[🔐 Tab 5: IAM View Directory]
         T1 --- T2 --- T3 --- T4 --- T5
     end
 
     %% ==================== PARALLEL FUNCTIONAL COLUMNS ====================
     subgraph COL1 [🎙️ 01. VOICE CONTROLLER]
-        V_Mic[🎤 Mic Input: LISTENING]:::voiceActive --> V_Macro[🎛️ Action Macro Trigger]:::widget
+        V_Mic[🎤 Mic Input: LISTENING] e1@--> V_Macro[🎛️ Action Macro Trigger]
     end
 
     subgraph COL2 [⚙️ 02. COMPUTATIONAL ENGINE]
-        M_Sweeps[📈 gemma4_engine.py<br>48hr Rolling Math Sweeps]:::widget --> M_FAISS[🧬 FAISS Vector Store<br>RBI Directions Context]:::dataNode
-        M_FAISS --> M_PDF[📄 ReportLab Automated<br>PDF Filing Briefs]:::widget
+        M_Sweeps[📈 gemma4_engine.py<br>48hr Rolling Math Sweeps] e2@--> M_FAISS[🧬 FAISS Vector Store<br>RBI Directions Context]
+        M_FAISS e3@--> M_PDF[📄 ReportLab Automated<br>PDF Filing Briefs]
     end
 
     subgraph COL3 [🚨 03. CORE USP: ACTIVE_LOCK]
-        A_Signal[⚠️ Section 4.2 PEP Risk Alert]:::widget --> A_Lock[🔒 ACTIVE_LOCK SYSTEM<br>CONTAINMENT ENGAGED]:::alertActive
+        A_Signal[⚠️ Section 4.2 PEP Risk Alert] e4@--> A_Lock[🔒 ACTIVE_LOCK SYSTEM<br>CONTAINMENT ENGAGED]
     end
 
     %% ==================== WIDESCREEN ALIGNMENT ROUTING ====================
@@ -38,9 +36,16 @@ graph LR
     %% Inter-widget structural data dependencies
     V_Macro -.->|Pipeline Trigger| M_Sweeps
     M_FAISS -.->|Signal Flag| A_Signal
-    A_Lock -.->|Bidirectional Security Lockout| T3
+    A_Lock -.->|Isolation Lockout| T3
 
-    %% Global Color Blueprint Parameters (Enforcing complete transparency to kill black boxes)
+    %% Class Assigning (Strict compilation compliance mapping)
+    class T1,T2,T3,T4,T5,V_Macro,M_Sweeps,M_PDF,A_Signal widget;
+    class SLIDE_START slideFrame;
+    class V_Mic voiceActive;
+    class A_Lock alertActive;
+    class M_FAISS dataNode;
+
+    %% Global Color Blueprint Parameters (Forced transparency to avoid black blocks)
     classDef default fill:none,stroke:#475569,stroke-width:2px,color:#F8FAFC;
     classDef slideFrame fill:none,stroke:#3B82F6,stroke-width:3px,color:#3B82F6,font-weight:bold;
     classDef widget fill:none,stroke:#64748B,stroke-width:1px,color:#E2E8F0;
@@ -53,4 +58,10 @@ graph LR
     style COL1 fill:none,stroke:#3B82F6,stroke-width:1px
     style COL2 fill:none,stroke:#475569,stroke-width:1px
     style COL3 fill:none,stroke:#EF4444,stroke-width:1px
+
+    %% ⚡ Native Edge Animation Flow Definitions (v11.3.0+)
+    e1@{ animate: true }
+    e2@{ animate: true }
+    e3@{ animate: true }
+    e4@{ animate: true }
 ```
