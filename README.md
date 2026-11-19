@@ -1,43 +1,23 @@
 ```mermaid
-graph TD
-    %% Main Columns mapped exactly to your repository tabs
-    subgraph TAB1 [01. Voice-Driven Monitoring Terminal]
-        F1_DESC[Replaces manual click buttons with<br>speech-to-text operation macros]
-        subgraph UPGRADE1 [VOICE INTERFACE UPGRADE]
-            V_Mic[🎤 Spoken: 'Run global audit'] --> V_Macro[Trigger: tab1_dashboard.py Pipeline]
-        end
+sequenceDiagram
+    autonumber
+    actor Officer as 🎤 Compliance Officer (Voice-Ops)
+    participant App as 🛡️ app.py (Tab Router)
+    participant Engine as ⚙️ gemma4_engine.py
+    participant VDB as 📚 FAISS Vector Store (RBI Base)
+    participant Reg as 🔒 tab3_registry.py (ACTIVE_LOCK)
+
+    Officer->>App: 🗣️ Verbal Command: "Run global audit and lock flagged PEP risks"
+    App->>Engine: Dispatch Stateless Scan Payload
+    Engine->>VDB: Query Legal Context (Similarity Search)
+    VDB-->>Engine: Return Section 4.2 Unverified PEP Framework Snippet
+    
+    rect rgb(40, 10, 10)
+        Engine->>Reg: Trigger Bidirectional Override: ACTIVE_LOCK
+        Reg->>Reg: Mutate State: Account Frozen / Ledger Blocked
+        Reg-->>App: Broadcast Global Isolation Token
     end
 
-    subgraph TAB2 [02. Grounded RAG & Math Engine]
-        F2_DESC[Runs 48hr cross-border math sweeps<br>and pulls FAISS regulatory context]
-        subgraph ENGINE2 [gemma4_engine.py INTERNALS]
-            S3[FAISS Vector Store] --> S4[ReportLab PDF Binary]
-        end
-    end
-
-    subgraph TAB4 [03. ACTIVE_LOCK Containment]
-        F3_DESC[Zero-trust workspace with instant<br>account containment isolation flags]
-        subgraph LOCK3 [REMEDIATION ACTIONS DESK]
-            S5[Section 4.2 PEP Breach] --> S6[🔒 Ledger Blocked / Account Frozen]
-        end
-    end
-
-    %% Class Assigning (GitHub strict parsing layout style)
-    class F1_DESC,F2_DESC feature;
-    class F3_DESC usp;
-    class V_Mic,V_Macro,S3,S4,S5,S6 sketch;
-
-    %% Global Slide Styles
-    classDef default fill:#111827,stroke:#374151,stroke-width:2px,color:#F3F4F6;
-    classDef feature fill:#1F2937,stroke:#4B5563,stroke-width:2px,color:#E5E7EB;
-    classDef usp fill:#7F1D1D,stroke:#EF4444,stroke-width:3px,color:#FFFFFF,font-weight:bold;
-    classDef sketch fill:#030712,stroke:#6B7280,stroke-width:1px,stroke-dasharray: 5 5,color:#9CA3AF,font-style:italic;
-
-    %% Layout adjustments
-    style TAB1 fill:#111827,stroke:#3B82F6,stroke-width:2px
-    style TAB2 fill:#111827,stroke:#374151
-    style TAB4 fill:#180808,stroke:#EF4444,stroke-width:2px
-    style UPGRADE1 fill:#030712,stroke:#3B82F6,stroke-dasharray: 5 5
-    style ENGINE2 fill:#030712,stroke:#6B7280,stroke-dasharray: 5 5
-    style LOCK3 fill:#030712,stroke:#EF4444,stroke-dasharray: 5 5
+    Engine->>Engine: Compile ReportLab PDF Binary Audit Trail
+    Engine-->>Officer: 📄 Output Complete Ready-To-File Brief + 🔒 Isolation Engaged
 ```
