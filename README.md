@@ -1,64 +1,55 @@
 ```mermaid
-graph TB
-    %% Main Presentation Slide Boundary Frame
-    subgraph SLIDE [📺 PRESENTATION SLIDE: RISK-GEMMA4-AGENT SOLUTION ARCHITECTURE]
-        
-        %% Central Top Navigation Tabs Framework (Horizontal Interface Bar)
-        subgraph NAV [🌐 Central Router: Multi-Tab Presentation Layout Gateway]
-            T1[📊 Tab 1: Terminal View] --- T2[🧠 Tab 2: Gemma Desk] --- T3[🔍 Tab 3: Customer 360] --- T4[⚡ Tab 4: Remediation] --- T5[🔐 Tab 5: IAM Security]
-        end
+graph LR
+    %% Widescreen Layout Initialization (Forces parallel landscape generation)
+    
+    %% Slide Left Boundary Anchor
+    SLIDE_START[📺 PRESENTATION SLIDE:<br>SYSTEM ARCHITECTURE]:::slideFrame
 
-        %% Mid-Tier Architecture Integration Core
-        subgraph CORE [🛡️ app.py Core Workspace Controller Router]
-            DIRECTION{🛡️ Role Permitted?}
-        end
-
-        %% Ground-Level Parallel System Processing Nodes (Widescreen 3-Column Split)
-        subgraph COL1 [🎙️ 01. VOICE-OPS CONTROLLER]
-            V_Mic[🎤 Mic Input: LISTENING] --> V_Stream["🗣️ Audio Ingest Stream:<br>'Run Section 4.2 Audit'"]
-            V_Stream --> V_Macro[🎛️ Action Macro Trigger]
-        end
-
-        subgraph COL2 [⚙️ 02. STATELESS COMPUTATIONAL CORE]
-            M_Sweeps[📈 gemma4_engine.py<br>48hr Rolling Math Sweeps] --> M_FAISS[🧬 LangChain FAISS<br>Vector Context RAG]
-            M_FAISS --> M_PDF[📄 ReportLab Automated<br>PDF Filing Briefs]
-        end
-
-        subgraph COL3 [🚨 03. ZERO-TRUST THREAT CONSOLE]
-            A_Signal[⚠️ Section 4.2 PEP Risk Alert] --> A_Override[🔴 System Override Form]
-            A_Override --> A_Lock[🔒 ACTIVE_LOCK: SYSTEM<br>CONTAINMENT ENGAGED]
-        end
-
+    %% ==================== TOP NAVIGATION ROW ====================
+    subgraph NAV [🌐 CENTRAL ROUTER: MULTI-TAB PRESENTER INTERFACE]
+        T1[📊 Tab 1: Monitoring Terminal]:::widget
+        T2[🧠 Tab 2: Gemma Reason Desk]:::widget
+        T3[🔍 Tab 3: Customer 360 Lookup]:::widget
+        T4[⚡ Tab 4: Actions Remediation]:::widget
+        T5[🔐 Tab 5: IAM View Directory]:::widget
+        T1 --- T2 --- T3 --- T4 --- T5
     end
 
-    %% Data Orchestration Layout Routing Pathways
-    NAV --> DIRECTION
-    DIRECTION --> COL1
-    DIRECTION --> COL2
-    DIRECTION --> COL3
+    %% ==================== PARALLEL FUNCTIONAL COLUMNS ====================
+    subgraph COL1 [🎙️ 01. VOICE CONTROLLER]
+        V_Mic[🎤 Mic Input: LISTENING]:::voiceActive --> V_Macro[🎛️ Action Macro Trigger]:::widget
+    end
 
-    %% Inter-widget interface dependencies data routing pathways
+    subgraph COL2 [⚙️ 02. COMPUTATIONAL ENGINE]
+        M_Sweeps[📈 gemma4_engine.py<br>48hr Rolling Math Sweeps]:::widget --> M_FAISS[🧬 FAISS Vector Store<br>RBI Directions Context]:::dataNode
+        M_FAISS --> M_PDF[📄 ReportLab Automated<br>PDF Filing Briefs]:::widget
+    end
+
+    subgraph COL3 [🚨 03. CORE USP: ACTIVE_LOCK]
+        A_Signal[⚠️ Section 4.2 PEP Risk Alert]:::widget --> A_Lock[🔒 ACTIVE_LOCK SYSTEM<br>CONTAINMENT ENGAGED]:::alertActive
+    end
+
+    %% ==================== WIDESCREEN ALIGNMENT ROUTING ====================
+    SLIDE_START --> NAV
+    SLIDE_START --> COL1
+    SLIDE_START --> COL2
+    SLIDE_START --> COL3
+
+    %% Inter-widget structural data dependencies
     V_Macro -.->|Pipeline Trigger| M_Sweeps
-    M_FAISS -.->|Signal Flag Issued| A_Signal
+    M_FAISS -.->|Signal Flag| A_Signal
     A_Lock -.->|Bidirectional Security Lockout| T3
 
-    %% Class Matrix Mappings (GitHub strict compiler validation routing)
-    class T1,T2,T3,T4,T5,V_Stream,V_Macro,M_Sweeps,M_FAISS,M_PDF,A_Signal,A_Override widget;
-    class V_Mic voiceActive;
-    class A_Lock,A_Override alertActive;
-    class DIRECTION dataNode;
+    %% Global Color Blueprint Parameters (Enforcing complete transparency to kill black boxes)
+    classDef default fill:none,stroke:#475569,stroke-width:2px,color:#F8FAFC;
+    classDef slideFrame fill:none,stroke:#3B82F6,stroke-width:3px,color:#3B82F6,font-weight:bold;
+    classDef widget fill:none,stroke:#64748B,stroke-width:1px,color:#E2E8F0;
+    classDef voiceActive fill:none,stroke:#3B82F6,stroke-width:2px,color:#60A5FA,font-weight:bold;
+    classDef alertActive fill:none,stroke:#EF4444,stroke-width:2px,color:#F87171,font-weight:bold;
+    classDef dataNode fill:none,stroke:#94A3B8,stroke-width:1px,stroke-dasharray: 3 3,color:#CBD5E1;
 
-    %% Global Workspace Styles (Forced stroke blueprints to completely eradicate black blocks)
-    classDef default fill:none,stroke:#475569,stroke-width:2px;
-    classDef widget fill:none,stroke:#64748B,stroke-width:1px;
-    classDef voiceActive fill:none,stroke:#3B82F6,stroke-width:2px,font-weight:bold;
-    classDef alertActive fill:none,stroke:#EF4444,stroke-width:2px,font-weight:bold;
-    classDef dataNode fill:none,stroke:#94A3B8,stroke-width:1px;
-
-    %% Outer Boundary Color Normalization Parameters
-    style SLIDE fill:none,stroke:#475569,stroke-width:2px
+    %% Clear block fills to match dark/light theme shifts natively
     style NAV fill:none,stroke:#475569
-    style CORE fill:none,stroke:#64748B
     style COL1 fill:none,stroke:#3B82F6,stroke-width:1px
     style COL2 fill:none,stroke:#475569,stroke-width:1px
     style COL3 fill:none,stroke:#EF4444,stroke-width:1px
