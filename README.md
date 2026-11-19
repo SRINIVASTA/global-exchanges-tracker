@@ -4,25 +4,25 @@ graph TD
     subgraph TAB1 [01. Voice-Driven Monitoring Terminal]
         F1_DESC[Replaces manual click buttons with<br>speech-to-text operation macros]
         subgraph UPGRADE1 [VOICE INTERFACE UPGRADE]
-            V_Mic[🎤 Spoken: 'Run global audit'] -->|Speech Recognition| V_Macro[Trigger: tab1_dashboard.py Pipeline]
+            V_Mic[🎤 Spoken: 'Run global audit'] --> V_Macro[Trigger: tab1_dashboard.py Pipeline]
         end
     end
 
     subgraph TAB2 [02. Grounded RAG & Math Engine]
         F2_DESC[Runs 48hr cross-border math sweeps<br>and pulls FAISS regulatory context]
         subgraph ENGINE2 [gemma4_engine.py INTERNALS]
-            S3[FAISS Vector Store] -->|RBI Master Directions| S4[ReportLab PDF Binary]
+            S3[FAISS Vector Store] --> S4[ReportLab PDF Binary]
         end
     end
 
     subgraph TAB4 [03. ACTIVE_LOCK Containment]
         F3_DESC[Zero-trust workspace with instant<br>account containment isolation flags]
         subgraph LOCK3 [REMEDIATION ACTIONS DESK]
-            S5[Section 4.2 PEP Breach] -->|ACTIVE_LOCK Trigger| S6[🔒 Ledger Blocked / Account Frozen]
+            S5[Section 4.2 PEP Breach] --> S6[🔒 Ledger Blocked / Account Frozen]
         end
     end
 
-    %% Class Assigning (GitHub safe syntax layout style)
+    %% Class Assigning (GitHub strict parsing layout style)
     class F1_DESC,F2_DESC feature;
     class F3_DESC usp;
     class V_Mic,V_Macro,S3,S4,S5,S6 sketch;
@@ -40,14 +40,4 @@ graph TD
     style UPGRADE1 fill:#030712,stroke:#3B82F6,stroke-dasharray: 5 5
     style ENGINE2 fill:#030712,stroke:#6B7280,stroke-dasharray: 5 5
     style LOCK3 fill:#030712,stroke:#EF4444,stroke-dasharray: 5 5
-
-    %% ⚡ Running Flow Animation Definitions
-    linkStyle 0 stroke:#3B82F6,stroke-width:3px,stroke-dasharray: 5,animation: actionFlow 1.5s linear infinite;
-    linkStyle 1 stroke:#10B981,stroke-width:3px,stroke-dasharray: 5,animation: actionFlow 2s linear infinite;
-    linkStyle 2 stroke:#EF4444,stroke-width:4px,stroke-dasharray: 5,animation: actionFlow 0.4s linear infinite;
-
-{
-  "theme": "dark",
-  "themeCSS": "@keyframes actionFlow { from { stroke-dashoffset: 20; } to { stroke-dashoffset: 0; } }"
-}
 ```
